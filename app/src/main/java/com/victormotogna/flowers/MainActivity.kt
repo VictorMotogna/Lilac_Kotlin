@@ -41,5 +41,9 @@ class MainActivity : AppCompatActivity() {
     private fun displayData(orders: List<Order>?) {
         val adapter = OrderAdapter(this, orders!!)
         rv_all_orders.adapter = adapter
+
+        refresh_orders.setOnRefreshListener { fetchData() }
+        adapter.notifyDataSetChanged()
+        refresh_orders.isRefreshing = false
     }
 }

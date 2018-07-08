@@ -9,4 +9,5 @@ class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val price = itemView.price
     val address = itemView.address
     val deliver_to = itemView.deliver_to
+    val learn_more = itemView.learn_more
 }
