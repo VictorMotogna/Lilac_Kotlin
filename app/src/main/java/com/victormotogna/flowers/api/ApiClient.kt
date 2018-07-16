@@ -18,4 +18,18 @@ object ApiClient {
             }
             return ourInstance!!
         }
+
+
+    /*
+
+    val instance: Retrofit by lazy {
+        Retrofit.Builder()
+                .baseUrl("https://demo9997383.mockable.io/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+        }
+    }
+
+    */
 }
