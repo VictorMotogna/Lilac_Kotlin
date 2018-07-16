@@ -2,13 +2,12 @@ package com.victormotogna.flowers.model
 
 import java.io.Serializable
 
-class Order
-(
-        var id: Int = 0,
-        var description: String? = "",
-        var price: Int = 0,
-        var deliver_to: String? = "",
-        var address: String? = ""
+data class Order(
+        val id: Int = 0,
+        val description: String? = "",
+        val price: Int = 0,
+        val deliver_to: String? = "",
+        val address: String? = ""
 ) : Serializable
 
 
@@ -18,7 +17,7 @@ class Order
        id: 1,
        description: "Red Roses",
        price: 50,
-       deliver_to: "Bianca Rus",
+       deliverTo: "Bianca Rus",
        address: "str. Liviu Rebreanu 4, Cluj-Napoca"
     }
 */

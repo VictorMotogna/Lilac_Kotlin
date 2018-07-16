@@ -1,5 +1,6 @@
 package com.victormotogna.flowers
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -12,26 +13,31 @@ import org.koin.android.ext.android.inject
 class MainActivity : AppCompatActivity() {
     private val viewModel by inject<MainViewModel>()
 
+    private val adapter by lazy {
+        OrderAdapter(this, listOf())
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // recycler view
         rv_all_orders.setHasFixedSize(true)
         rv_all_orders.layoutManager = LinearLayoutManager(this)
-        fetchData()
-    }
-
-    private fun fetchData() {
-        displayData(viewModel.fetchData())
-    }
-
-    private fun displayData(orders: List<Order>?) {
-        val adapter = OrderAdapter(this, orders!!)
         rv_all_orders.adapter = adapter
 
-        refresh_orders.setOnRefreshListener { fetchData() }
-        adapter.notifyDataSetChanged()
-        refresh_orders.isRefreshing = false
+        refresh_orders.setOnRefreshListener { viewModel.fetchData() }
+
+//        refresh_orders.isRefreshing = true
+//        viewModel.fetchData()
+        observeModel()
+    }
+
+    private fun observeModel() {
+        viewModel.orderList.observe(this, object : Observer<List<Order>> {
+            override fun onChanged(t: List<Order>?) {
+                adapter.updateList(t ?: listOf())
+                refresh_orders.isRefreshing = false
+            }
+        })
     }
 }

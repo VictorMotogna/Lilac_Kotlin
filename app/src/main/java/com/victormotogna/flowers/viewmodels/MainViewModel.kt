@@ -1,30 +1,31 @@
 package com.victormotogna.flowers.viewmodels
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.victormotogna.flowers.api.ApiClient
+import android.util.Log
 import com.victormotogna.flowers.api.FlowersApi
 import com.victormotogna.flowers.model.Order
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import org.koin.standalone.KoinComponent
-import java.util.*
+import org.koin.standalone.inject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainViewModel : ViewModel(), KoinComponent {
-    private lateinit var jsonApi: FlowersApi
-    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
-    var orderList: List<Order> = ArrayList()
+    private val jsonApi by inject<FlowersApi>()
+    val orderList: MutableLiveData<List<Order>> = MutableLiveData()
 
-    fun fetchData(): List<Order> {
-        // init api
-        val retrofit = ApiClient.instance
-        jsonApi = retrofit.create(FlowersApi::class.java)
+    fun fetchData() {
 
-        compositeDisposable.add(jsonApi.flowers
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { orderList })
+        jsonApi.getFlowersFunc().enqueue(object : Callback<List<Order>> {
+            override fun onFailure(call: Call<List<Order>>?, t: Throwable?) {
 
-        return orderList
+            }
+
+            override fun onResponse(call: Call<List<Order>>?, response: Response<List<Order>>?) {
+                Log.d("TESTSS", "body: ${response?.body()}")
+                orderList.value = response?.body() ?: return
+            }
+        })
     }
 }
