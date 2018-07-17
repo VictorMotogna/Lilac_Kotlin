@@ -19,8 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupUi()
-//        refresh_orders.isRefreshing = true
-//        viewModel.fetchData()
+        viewModel.fetchData()
         observeModel()
     }
 

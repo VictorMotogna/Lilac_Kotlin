@@ -2,7 +2,6 @@ package com.victormotogna.flowers.viewmodels
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import com.victormotogna.flowers.api.FlowersApi
 import com.victormotogna.flowers.model.Order
 import org.koin.standalone.KoinComponent
@@ -23,7 +22,6 @@ class MainViewModel : ViewModel(), KoinComponent {
             }
 
             override fun onResponse(call: Call<List<Order>>?, response: Response<List<Order>>?) {
-                Log.d("TESTSS", "body: ${response?.body()}")
                 orderList.value = response?.body() ?: return
             }
         })
