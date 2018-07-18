@@ -31,7 +31,7 @@ class OrderAdapter(private var context: Context,
         holder.updateUi(orderList[position])
 
         holder.learnMore.setOnClickListener {
-            Toast.makeText(context, "I do nothing, sorry! :(", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "${orderList[position].description} for ${orderList[position].deliver_to}", Toast.LENGTH_SHORT).show()
         }
     }
 
