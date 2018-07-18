@@ -1,16 +1,40 @@
 package com.victormotogna.flowers
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
+import android.support.v7.widget.LinearLayoutManager
+import com.victormotogna.flowers.adapters.OrderAdapter
+import com.victormotogna.flowers.model.Order
+import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel by inject<MainViewModel>()
+    private val adapter by lazy { OrderAdapter(listOf()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setupUI()
+        viewModel.fetchData()
+        observeModel()
+    }
 
-        Toast.makeText(this, "Blank app. Too bad :(", Toast.LENGTH_SHORT).show()
+    private fun setupUI() {
+        rv_all_orders.setHasFixedSize(true)
+        rv_all_orders.layoutManager = LinearLayoutManager(this)
+        rv_all_orders.adapter = adapter
+
+        refresh_orders.setOnRefreshListener { viewModel.fetchData() }
+    }
+
+    private fun observeModel() {
+        viewModel.orderList.observe(this, Observer<List<Order>> { listOfFlowers ->
+            adapter.updateList(listOfFlowers ?: return@Observer)
+            refresh_orders.isRefreshing = false
+        })
     }
 
 }
